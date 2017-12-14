@@ -304,106 +304,12 @@ void PaintingWindow::paintEvent(QPaintEvent *event)
             painter.drawLine(draw_end.x(), draw_end.y(), draw_end.x() + line_count * padding_interlines, draw_end.y());
             line_count++;
 
-            //lines_with_right_labels.append(it);
-
             painter.drawText(draw_start.x() + (lines_to_draw.length() + 1) * padding_interlines + 2, draw_start.y() - 1, it.label);
 
             painter.drawLine(draw_end.x(), draw_end.y(), draw_end.x() + 7, draw_end.y() + module_height_per_product * 0.4);
             painter.drawLine(draw_end.x(), draw_end.y(), draw_end.x() + 7, draw_end.y() - module_height_per_product * 0.4);
         }
     }
-
-/*
- * Drawing labels for (some) lines
- */
-
-//    const int width_per_prod{15};
-//    const int height_per_prod_line{10};
-//
-//
-//    const int real_start_x{20};
-//    int start_y{20}, start_x{real_start_x + (targets.size() + 4) * padding_interlines};
-//    for(int i{0}; i < targets.size(); i++){
-//        ProductModule prodmod = targets[i];
-//        int last_x = start_x + (i+1) * width_per_prod;
-//        int last_y = start_y;
-//        Module *latest_drawed_mod;
-//        Product c_prod = prodmod.product;
-//        painter.drawText(last_x, last_y, QString::number(c_prod.id));
-//        int cur_mod{0};
-//        for(auto &c_mod : prodmod.modules){
-//            if(drawed_modules.contains(c_mod)){ //Модуль вже зображено
-//                bool left_side = true;
-//                if(latest_drawed_mod && drawed_modules.contains(latest_drawed_mod)){
-//                    if(drawed_modules.indexOf(latest_drawed_mod) > drawed_modules.indexOf(c_mod)){
-//                        left_side = false;
-//                    }
-//                }
-//                int mod_ind = drawed_modules.indexOf(c_mod);
-//                QPoint mod_point = module_starts[mod_ind];
-//                if(last_y != start_y){  //Від модуля до модуля
-//                    if(left_side){
-//                        int next_y = last_y + height_per_prod_line*(i+1);
-//                        left_line_count++;
-//                        painter.drawLine(last_x, next_y, last_x - padding_interlines*left_line_count, next_y);
-//                        painter.drawText(last_x - padding_interlines*left_line_count, next_y - 1, QString::number(c_prod.id));
-//                        painter.drawLine(last_x - padding_interlines*left_line_count, next_y, last_x - padding_interlines*left_line_count, mod_point.y() + height_per_prod_line*(i+1));
-//                        painter.drawLine(last_x - padding_interlines*left_line_count, mod_point.y() + height_per_prod_line*(i+1), last_x, mod_point.y() + height_per_prod_line*(i+1));
-//                    }else{
-//                        int next_y = last_y + height_per_prod_line*(i+1);
-//                        int next_x = last_x + width_per_prod * (targets.size() + 2);
-//                        right_line_count++;
-//                        painter.drawLine(next_x, next_y, next_x + padding_interlines*right_line_count, next_y);
-//                        painter.drawText(next_x + padding_interlines*right_line_count, next_y - 1, QString::number(c_prod.id));
-//                        painter.drawLine(next_x + padding_interlines*right_line_count, next_y, next_x + padding_interlines*right_line_count, mod_point.y() + height_per_prod_line*(i+1));
-//                        painter.drawLine(next_x + padding_interlines*right_line_count, mod_point.y() + height_per_prod_line*(i+1), next_x, mod_point.y() + height_per_prod_line*(i+1));
-//                    }
-//                }else{  //Від входу до модуля
-//                    painter.drawLine(last_x, last_y, last_x, mod_point.y());
-//                }
-//                last_x = mod_point.x();
-//                last_y = mod_point.y();
-//            }else{  //Зображаємо модуль
-//                int new_x, new_y;
-
-//                if(drawed_modules.size()){
-//                    QPoint last_mod_p = module_starts[drawed_modules.size() - 1];
-//                    new_x = last_mod_p.x();
-//                    new_y = last_mod_p.y() + height_per_prod_line * (targets.size() + 1) + 25;
-//                }else{
-//                    new_x = real_start_x + (targets.size() + 2) * padding_interlines;
-//                    new_y = start_y + 25;
-//                }
-//                painter.drawRect(new_x, new_y, width_per_prod * (targets.size() + 2), height_per_prod_line*(targets.size()+1));
-//                QString draw_string;
-//                for(auto &operation : c_mod->operations){
-//                    draw_string.append(operation);
-//                    draw_string.append(" ");
-//                }
-//                painter.drawText(new_x + 10, new_y + height_per_prod_line*(targets.size()+1)/2 + 5, draw_string);
-//                QPoint new_mod_point(new_x, new_y);
-//                drawed_modules.append(c_mod);
-//                module_starts.append(new_mod_point);
-//                if(!cur_mod){
-//                    painter.drawLine(last_x, last_y, last_x, new_y);
-//                }else{
-//                    int old_y = module_starts[drawed_modules.indexOf(prodmod.modules[cur_mod - 1])].y() + height_per_prod_line*(i+1);
-//                    left_line_count++;
-//                    painter.drawLine(new_x, old_y, new_x - padding_interlines*left_line_count, old_y);
-//                    painter.drawText(new_x - padding_interlines*left_line_count, old_y - 1, QString::number(c_prod.id));
-//                    painter.drawLine(new_x - padding_interlines*left_line_count, old_y, new_x - padding_interlines*left_line_count, new_y + height_per_prod_line*(i+1));
-//                    painter.drawLine(new_x - padding_interlines*left_line_count, new_y + height_per_prod_line*(i+1), last_x, new_y + height_per_prod_line*(i+1));
-//                }
-//                last_x = new_x;
-//                last_y = new_y;
-//                latest_drawed_mod = c_mod;
-//            }
-//            cur_mod++;
-//        }
-//        int exit_x = last_x + width_per_prod * (targets.size() + 2);
-//        painter.drawLine(exit_x, last_y + height_per_prod_line*(i+1), width(), last_y + height_per_prod_line*(i+1));
-//        painter.drawText((width() + exit_x)/2, last_y + height_per_prod_line*(i+1) - 1, QString::number(c_prod.id));
-    //    }
 }
 
 void PaintingWindow::mousePressEvent(QMouseEvent *event)
