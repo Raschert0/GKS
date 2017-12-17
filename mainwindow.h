@@ -29,7 +29,9 @@ private:
     void drawSchema(QVector<ProductModule> &targets);
 
     QPlainTextEdit text_input{this};
-    QPushButton do_work_button{this}, close_childs_button{this};
+    QPushButton do_work_button{this};
+    QPushButton close_childs_button{this};
+    QPushButton load_from_json_button{this};
     const int margin{10};
     QList<Product> working_set;
     GKS gks;
@@ -40,6 +42,7 @@ private:
 public slots:
     void startWorking();
     void closeChildrens();
+    void loadFromJson();
 };
 
 #endif // MAINWINDOW_H

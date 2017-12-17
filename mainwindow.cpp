@@ -1,7 +1,14 @@
 #include "mainwindow.h"
 #include <QMessageBox>
 #include "paintingwindow.h"
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QFileDialog>
+#include <QFile>
+#include <QStandardPaths>
 
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -12,11 +19,14 @@ MainWindow::MainWindow(QWidget *parent) :
     close_childs_button.setGeometry(do_work_button.x(), do_work_button.y() + do_work_button.height() + margin, do_work_button.width(), do_work_button.height());
     close_childs_button.setText("Закрити вікна-таблиці");
     close_childs_button.hide();
+    load_from_json_button.setGeometry(close_childs_button.x(), close_childs_button.y() + close_childs_button.height() + margin, do_work_button.width(), do_work_button.height());
+    load_from_json_button.setText("Load from JSON");
     instructions.setText("Інструкція:\n - У поле, що знаходиться вище, необхідно увести\n\tоперації, необхідні для виготовлення виробів\n - Один рядок - один виріб\n - Допускаються абсолютно пусті рядки\n - У якості розділювача можна використовувати\n\tбудь-який символ, що не є літерою латинского алфавіту\n\tабо цифрою\n - Ввід є чутливим до регістру\n - Для здійснення обрахунків і виведення таблиць\n\tпісля закінчення вводу необхідно\n\tнатиснути на кнопку Do work");
     instructions.setFixedHeight(180);
     instructions.move(text_input.x(), text_input.y()+text_input.height()+margin);
     connect(&do_work_button, &QPushButton::clicked, this, &MainWindow::startWorking);
     connect(&close_childs_button, &QPushButton::clicked, this, &MainWindow::closeChildrens);
+    connect(&load_from_json_button, &QPushButton::clicked, this, &MainWindow::loadFromJson);
     setFixedSize(do_work_button.x()+do_work_button.width()+margin,instructions.y()+instructions.height()+margin*2);
     instructions.setFixedWidth(width() - margin*2);
     move(20,20);
@@ -227,4 +237,38 @@ void MainWindow::closeChildrens()
         pw = nullptr;
     }
     close_childs_button.hide();
+}
+
+void MainWindow::loadFromJson()
+{
+    QString docs_dir = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString());
+    QString filename = QFileDialog::getOpenFileName(this, tr("Відкрити файл"), docs_dir, tr("JSON files (*.json)"));
+    if(!filename.length()){
+        return;
+    }
+    QFile load_file(filename);
+    if(!load_file.open(QIODevice::ReadOnly)){
+        qWarning() << "Couldn't open JSON file.";
+        return;
+    }
+
+    QByteArray file_data = load_file.readAll();
+
+    QJsonDocument load_doc(QJsonDocument::fromJson(file_data));
+    QJsonArray a = load_doc.array();
+    QJsonObject o = load_doc.object();
+    for(auto it = o.begin(); it != o.end(); it++){
+        if(it.value().isArray()){
+            QJsonArray a = it.value().toArray();
+            QString str;
+            for(int i{0}; i < a.size(); ++i){
+                if(a[i].isString()){
+                    str.append(a[i].toString());
+                    str.append(" ");
+                }
+            }
+            text_input.appendPlainText(str);
+        }
+    }
+    return;
 }
