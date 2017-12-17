@@ -335,6 +335,15 @@ void GKS::graphsDecomposition()
 
                 QVector<GNode*> loop_vect = checkClosedLoop(c_node, 5);
                 if(loop_vect.size()){ //Перевірка наявності контуру
+                    /*int loop_start{-1};
+                    for(GNode* &it : loop_vect){
+                        if(loop_vect.indexOf(it) != loop_vect.lastIndexOf(it)){
+                            loop_start = loop_vect.indexOf(it);
+                        }
+                    }
+                    while(loop_start >= 0){
+                        loop_vect.removeAt(loop_start);
+                    }*/
                     int total_ops{0};
                     for(GNode* &it : loop_vect){
                         total_ops += it->operations.length();
@@ -496,7 +505,7 @@ QVector<GNode*> GKS::checkClosedLoop(GNode *node, int depth_left)
         if(!ret_vect.size()){
             continue;
         }
-        if(ret_vect.count(f_node) > 1){ //Вийшли з контуру
+        if(ret_vect.count(node) || !ret_vect.count(f_node)){ //Вийшли з контуру
             break;
         }
         ret_vect.append(node);
@@ -557,16 +566,6 @@ void GKS::squahNodes(QVector<GNode*> &nodes, Graph &target_graph)
     }
     for(int i{0}; i < nodes.size(); i++){
         for(auto &inp : nodes[i]->inputs){
-            /*bool skip = false;
-            for(auto &node : nodes){
-                if(node == inp){
-                    skip = true;
-                    break;
-                }
-            }
-            if(skip){
-                continue;
-            }*/
             new_node->inputs.append(inp);
             inp->outputs.removeAll(nodes[i]);
             if(!inp->inputs.contains(new_node)){
@@ -574,16 +573,6 @@ void GKS::squahNodes(QVector<GNode*> &nodes, Graph &target_graph)
             }
         }
         for(auto &outp : nodes[i]->outputs){
-            /*bool skip = false;
-            for(auto &node : nodes){
-                if(node == inp){
-                    skip = true;
-                    break;
-                }
-            }
-            if(skip){
-                continue;
-            }*/
             new_node->outputs.append(outp);
             outp->inputs.removeAll(nodes[i]);
             if(!outp->inputs.contains(new_node)){
