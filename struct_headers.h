@@ -2,6 +2,7 @@
 #define STRUCT_HEADERS_H
 #include <QList>
 #include <QString>
+#include <QVector>
 
 struct Product{
     Product() : id{0}{}

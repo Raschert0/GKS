@@ -298,7 +298,7 @@ void GKS::graphsDecomposition()
     for(int i{0}; i < graphs_cached.size(); i++){
         Graph c_graph = graphs_cached.at(i);
         bool finished = false;
-        QVector<GNode*> skipped; //Вершини лише зі входами та лише з виходами;
+        QVector<GNode*> skipped; //Р’РµСЂС€РёРЅРё Р»РёС€Рµ Р·С– РІС…РѕРґР°РјРё С‚Р° Р»РёС€Рµ Р· РІРёС…РѕРґР°РјРё;
         while(!finished){
             bool start_from_scratch = false;
             QVector<GNode*> reverse_checked;
@@ -314,8 +314,8 @@ void GKS::graphsDecomposition()
                 if(c_node->operations.length() > 4){
                     continue;
                 }
-                for(auto &another_node : c_graph.nodes){ //Перевірка наявності зворотніх зв'язків
-                    if(skipped.contains(another_node) || reverse_checked.contains(another_node)){ //Вершина не може мати зворотній зв'язок або вже була перевірена
+                for(auto &another_node : c_graph.nodes){ //РџРµСЂРµРІС–СЂРєР° РЅР°СЏРІРЅРѕСЃС‚С– Р·РІРѕСЂРѕС‚РЅС–С… Р·РІ'СЏР·РєС–РІ
+                    if(skipped.contains(another_node) || reverse_checked.contains(another_node)){ //Р’РµСЂС€РёРЅР° РЅРµ РјРѕР¶Рµ РјР°С‚Рё Р·РІРѕСЂРѕС‚РЅС–Р№ Р·РІ'СЏР·РѕРє Р°Р±Рѕ РІР¶Рµ Р±СѓР»Р° РїРµСЂРµРІС–СЂРµРЅР°
                         continue;
                     }
                     if(another_node->operations.length() > 4 || !c_node->haveReverseWith(another_node)){
@@ -334,7 +334,7 @@ void GKS::graphsDecomposition()
                 reverse_checked.append(c_node);
 
                 QVector<GNode*> loop_vect = checkClosedLoop(c_node, 5);
-                if(loop_vect.size()){ //Перевірка наявності контуру
+                if(loop_vect.size()){ //РџРµСЂРµРІС–СЂРєР° РЅР°СЏРІРЅРѕСЃС‚С– РєРѕРЅС‚СѓСЂСѓ
                     int total_ops{0};
                     for(GNode* &it : loop_vect){
                         total_ops += it->operations.length();
@@ -347,7 +347,7 @@ void GKS::graphsDecomposition()
                 }
 
                 QVector<GNode*> chain_vect = checkChain(c_node, c_node, 5);
-                if(chain_vect.size()){ //Перевірка наявності контуру
+                if(chain_vect.size()){ //РџРµСЂРµРІС–СЂРєР° РЅР°СЏРІРЅРѕСЃС‚С– РєРѕРЅС‚СѓСЂСѓ
                     int total_ops{0};
                     for(GNode* &it : chain_vect){
                         total_ops += it->operations.length();
@@ -496,7 +496,7 @@ QVector<GNode*> GKS::checkClosedLoop(GNode *node, int depth_left)
         if(!ret_vect.size()){
             continue;
         }
-        if(ret_vect.count(f_node) > 1){ //Вийшли з контуру
+        if(ret_vect.count(f_node) > 1){ //Р’РёР№С€Р»Рё Р· РєРѕРЅС‚СѓСЂСѓ
             break;
         }
         ret_vect.append(node);
@@ -545,7 +545,7 @@ QVector<GNode *> GKS::checkChain(GNode *node, GNode *head_node, int depth_left)
 void GKS::squahNodes(QVector<GNode*> &nodes, Graph &target_graph)
 {
     GNode *new_node = new GNode;
-    for(auto &nod : nodes){ //Видалення внутрішніх зв'язків
+    for(auto &nod : nodes){ //Р’РёРґР°Р»РµРЅРЅСЏ РІРЅСѓС‚СЂС–С€РЅС–С… Р·РІ'СЏР·РєС–РІ
         for(auto &nod2 : nodes){
             if(nod->inputs.contains(nod2)){
                 nod->inputs.removeAll(nod2);

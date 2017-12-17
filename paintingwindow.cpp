@@ -19,20 +19,20 @@ void PaintingWindow::initialize(QVector<ProductModule> &targets)
     QMap<Module*, short> outputs;
 
     for(auto &it : targets){
-        for(const auto &module : it.modules){ //Формування вектору всіх модулів
+        for(const auto &module : it.modules){ //Р¤РѕСЂРјСѓРІР°РЅРЅСЏ РІРµРєС‚РѕСЂСѓ РІСЃС–С… РјРѕРґСѓР»С–РІ
             if(all_modules.contains(module)){
                 continue;
             }
             all_modules.append(module);
         }
 
-        if(inputs.contains(it.modules.first())){ //Знаходження модуля з найб. кількістю входів: крок 1
+        if(inputs.contains(it.modules.first())){ //Р—РЅР°С…РѕРґР¶РµРЅРЅСЏ РјРѕРґСѓР»СЏ Р· РЅР°Р№Р±. РєС–Р»СЊРєС–СЃС‚СЋ РІС…РѕРґС–РІ: РєСЂРѕРє 1
             inputs[it.modules.first()]++;
         }else{
             inputs.insert(it.modules.first(), 1);
         }
 
-        if(outputs.contains(it.modules.last())){ //Знаходження модуля з найб. кількістю виходів: крок 1
+        if(outputs.contains(it.modules.last())){ //Р—РЅР°С…РѕРґР¶РµРЅРЅСЏ РјРѕРґСѓР»СЏ Р· РЅР°Р№Р±. РєС–Р»СЊРєС–СЃС‚СЋ РІРёС…РѕРґС–РІ: РєСЂРѕРє 1
             outputs[it.modules.last()]++;
         }else{
             outputs.insert(it.modules.last(), 1);
@@ -42,7 +42,7 @@ void PaintingWindow::initialize(QVector<ProductModule> &targets)
     short max_val{0};
     Module *max_mod{nullptr};
     QMap<Module*, short>::iterator it;
-    for(it = inputs.begin(); it != inputs.end(); it++){ //Знаходження модуля з найб. кількустю входів: крок 2
+    for(it = inputs.begin(); it != inputs.end(); it++){ //Р—РЅР°С…РѕРґР¶РµРЅРЅСЏ РјРѕРґСѓР»СЏ Р· РЅР°Р№Р±. РєС–Р»СЊРєСѓСЃС‚СЋ РІС…РѕРґС–РІ: РєСЂРѕРє 2
         if(it.value() > max_val){
             max_mod = it.key();
             max_val = it.value();
@@ -51,7 +51,7 @@ void PaintingWindow::initialize(QVector<ProductModule> &targets)
     first_module = max_mod;
     max_val = 0;
     max_mod = nullptr;
-    for(it = outputs.begin(); it != outputs.end(); it++){ //Знаходження модуля з найб. кількустю виходів: крок 2
+    for(it = outputs.begin(); it != outputs.end(); it++){ //Р—РЅР°С…РѕРґР¶РµРЅРЅСЏ РјРѕРґСѓР»СЏ Р· РЅР°Р№Р±. РєС–Р»СЊРєСѓСЃС‚СЋ РІРёС…РѕРґС–РІ: РєСЂРѕРє 2
         if(it.key() == first_module){
             continue;
         }
@@ -74,7 +74,7 @@ void PaintingWindow::initialize(QVector<ProductModule> &targets)
         for(int i{1}; i < all_modules.length() - 1; i++){
             a_ind.append(i);
         }
-        shuffleModules(a_ind, empty_vect); //Оптимізація схеми
+        shuffleModules(a_ind, empty_vect); //РћРїС‚РёРјС–Р·Р°С†С–СЏ СЃС…РµРјРё
     }
 }
 
