@@ -6,6 +6,7 @@
 #include <QJsonObject>
 #include <QFileDialog>
 #include <QFile>
+#include <QDir>
 #include <QStandardPaths>
 
 #include <QDebug>
@@ -241,7 +242,11 @@ void MainWindow::closeChildrens()
 
 void MainWindow::loadFromJson()
 {
-    QString docs_dir = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString());
+    QString docs_dir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    QDir ddir(docs_dir);
+    if(!ddir.exists()){
+        docs_dir.clear();
+    }
     QString filename = QFileDialog::getOpenFileName(this, tr("Відкрити файл"), docs_dir, tr("JSON files (*.json)"));
     if(!filename.length()){
         return;
@@ -255,8 +260,8 @@ void MainWindow::loadFromJson()
     QByteArray file_data = load_file.readAll();
 
     QJsonDocument load_doc(QJsonDocument::fromJson(file_data));
-    QJsonArray a = load_doc.array();
     QJsonObject o = load_doc.object();
+    text_input.clear();
     for(auto it = o.begin(); it != o.end(); it++){
         if(it.value().isArray()){
             QJsonArray a = it.value().toArray();
