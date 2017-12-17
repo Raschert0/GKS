@@ -2,6 +2,7 @@
 #define PAINTINGWINDOW_H
 
 #include <QWidget>
+#include <QMouseEvent>
 #include "struct_headers.h"
 
 class PaintingWindow : public QWidget

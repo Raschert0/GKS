@@ -13,9 +13,9 @@ MainWindow::MainWindow(QWidget *parent) :
     do_work_button.setGeometry(margin+text_input.x()+text_input.width(),text_input.y(),130,20);
     do_work_button.setText("Do work");
     close_childs_button.setGeometry(do_work_button.x(), do_work_button.y() + do_work_button.height() + margin, do_work_button.width(), do_work_button.height());
-    close_childs_button.setText(QString::fromLocal8Bit("Закрити вікна-таблиці"));
+    close_childs_button.setText(QString::fromLocal8Bit("Р—Р°РєСЂРёС‚Рё РІС–РєРЅР°-С‚Р°Р±Р»РёС†С–"));
     close_childs_button.hide();
-    instructions.setText(QString::fromLocal8Bit("Інструкція:\n - У поле, що знаходиться вище, необхідно увести\n\tоперації, необхідні для виготовлення виробів\n - Один рядок - один виріб\n - Допускаються абсолютно пусті рядки\n - У якості розділювача можна використовувати\n\tбудь-який символ, що не є літерою латинского алфавіту\n\tабо цифрою\n - Ввід є чутливим до регістру\n - Для здійснення обрахунків і виведення таблиць\n\tпісля закінчення вводу необхідно\n\tнатиснути на кнопку Do work"));
+    instructions.setText(QString::fromLocal8Bit("Р†РЅСЃС‚СЂСѓРєС†С–СЏ:\n - РЈ РїРѕР»Рµ, С‰Рѕ Р·РЅР°С…РѕРґРёС‚СЊСЃСЏ РІРёС‰Рµ, РЅРµРѕР±С…С–РґРЅРѕ СѓРІРµСЃС‚Рё\n\tРѕРїРµСЂР°С†С–С—, РЅРµРѕР±С…С–РґРЅС– РґР»СЏ РІРёРіРѕС‚РѕРІР»РµРЅРЅСЏ РІРёСЂРѕР±С–РІ\n - РћРґРёРЅ СЂСЏРґРѕРє - РѕРґРёРЅ РІРёСЂС–Р±\n - Р”РѕРїСѓСЃРєР°СЋС‚СЊСЃСЏ Р°Р±СЃРѕР»СЋС‚РЅРѕ РїСѓСЃС‚С– СЂСЏРґРєРё\n - РЈ СЏРєРѕСЃС‚С– СЂРѕР·РґС–Р»СЋРІР°С‡Р° РјРѕР¶РЅР° РІРёРєРѕСЂРёСЃС‚РѕРІСѓРІР°С‚Рё\n\tР±СѓРґСЊ-СЏРєРёР№ СЃРёРјРІРѕР», С‰Рѕ РЅРµ С” Р»С–С‚РµСЂРѕСЋ Р»Р°С‚РёРЅСЃРєРѕРіРѕ Р°Р»С„Р°РІС–С‚Сѓ\n\tР°Р±Рѕ С†РёС„СЂРѕСЋ\n - Р’РІС–Рґ С” С‡СѓС‚Р»РёРІРёРј РґРѕ СЂРµРіС–СЃС‚СЂСѓ\n - Р”Р»СЏ Р·РґС–Р№СЃРЅРµРЅРЅСЏ РѕР±СЂР°С…СѓРЅРєС–РІ С– РІРёРІРµРґРµРЅРЅСЏ С‚Р°Р±Р»РёС†СЊ\n\tРїС–СЃР»СЏ Р·Р°РєС–РЅС‡РµРЅРЅСЏ РІРІРѕРґСѓ РЅРµРѕР±С…С–РґРЅРѕ\n\tРЅР°С‚РёСЃРЅСѓС‚Рё РЅР° РєРЅРѕРїРєСѓ Do work"));
     instructions.setFixedHeight(180);
     instructions.move(text_input.x(), text_input.y()+text_input.height()+margin);
     connect(&do_work_button, &QPushButton::clicked, this, &MainWindow::startWorking);
@@ -56,7 +56,7 @@ void MainWindow::drawSchema(QVector<ProductModule> &targets)
 {
     pw = new PaintingWindow();
     pw->initialize(targets);
-    pw->setWindowTitle(QString::fromLocal8Bit("Оптимізована структурно-технологічна схема"));
+    pw->setWindowTitle(QString::fromLocal8Bit("РћРїС‚РёРјС–Р·РѕРІР°РЅР° СЃС‚СЂСѓРєС‚СѓСЂРЅРѕ-С‚РµС…РЅРѕР»РѕРіС–С‡РЅР° СЃС…РµРјР°"));
     pw->show();
     pw->repaint();
 }
@@ -74,7 +74,7 @@ void MainWindow::startWorking()
         delete fmw;
     }
     fmw = new FirstMatrixWindow();
-    fmw->setWindowTitle(QString::fromLocal8Bit("Таблиця 1. Операції за об'єктами"));
+    fmw->setWindowTitle(QString::fromLocal8Bit("РўР°Р±Р»РёС†СЏ 1. РћРїРµСЂР°С†С–С— Р·Р° РѕР±'С”РєС‚Р°РјРё"));
     fmw->show();
     QList<QString> rows_names;
     for(auto &it : working_set){
@@ -93,7 +93,7 @@ void MainWindow::startWorking()
     if(smw)
         delete smw;
     smw = new FirstMatrixWindow();
-    smw->setWindowTitle(QString::fromLocal8Bit("Таблиця 2. Матриця подібності"));
+    smw->setWindowTitle(QString::fromLocal8Bit("РўР°Р±Р»РёС†СЏ 2. РњР°С‚СЂРёС†СЏ РїРѕРґС–Р±РЅРѕСЃС‚С–"));
     QList<QString>cols_rows_names;
     for(auto &it : working_set){
         cols_rows_names.push_back(QString::number(it.id));
@@ -106,7 +106,7 @@ void MainWindow::startWorking()
     if(tmw)
         delete tmw;
     tmw = new FirstMatrixWindow();
-    tmw->setWindowTitle(QString::fromLocal8Bit("Таблиця 3. Розподіл на групи за матрицею подібності"));
+    tmw->setWindowTitle(QString::fromLocal8Bit("РўР°Р±Р»РёС†СЏ 3. Р РѕР·РїРѕРґС–Р» РЅР° РіСЂСѓРїРё Р·Р° РјР°С‚СЂРёС†РµСЋ РїРѕРґС–Р±РЅРѕСЃС‚С–"));
     QVector<QVector<Product>> product_groups = gks.splitByGroupsP1();
     QVector<QVector<QString>> operations_by_groups = gks.countOperationsByGroups();
     QList<QString> second_col;
@@ -131,7 +131,7 @@ void MainWindow::startWorking()
     if(ffmw)
         delete ffmw;
     ffmw = new FirstMatrixWindow();
-    ffmw->setWindowTitle(QString::fromLocal8Bit("Таблиця 4. Остаточний розподіл на групи"));
+    ffmw->setWindowTitle(QString::fromLocal8Bit("РўР°Р±Р»РёС†СЏ 4. РћСЃС‚Р°С‚РѕС‡РЅРёР№ СЂРѕР·РїРѕРґС–Р» РЅР° РіСЂСѓРїРё"));
     gks.sortGroupsByOperationsCount();
     gks.splitByGroupsP2();
     product_groups = gks.getGroups();
@@ -162,7 +162,7 @@ void MainWindow::startWorking()
         delete fvmw;
     }
     fvmw = new FirstMatrixWindow();
-    fvmw->setWindowTitle(QString::fromLocal8Bit("Таблиця 5. Модулі"));
+    fvmw->setWindowTitle(QString::fromLocal8Bit("РўР°Р±Р»РёС†СЏ 5. РњРѕРґСѓР»С–"));
     rows_names.clear();
     second_col.clear();
     for(int i{0}; i < created_modules.size(); i++){
