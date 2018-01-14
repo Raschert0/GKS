@@ -18,7 +18,8 @@ void PaintingWindow::initialize(QVector<ProductModule> &targets)
     QMap<Module*, short> inputs;
     QMap<Module*, short> outputs;
 
-    for(auto &it : targets){
+    for(ProductModule &it : targets){
+        qDebug() << it.product.id << " " << it.modules.size();
         for(const auto &module : it.modules){ //Формування вектору всіх модулів
             if(all_modules.contains(module)){
                 continue;

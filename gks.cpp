@@ -1,4 +1,5 @@
 #include "gks_header.h"
+#include <QDebug>
 
 GKS::~GKS()
 {
@@ -109,19 +110,36 @@ QVector<QVector<Product> > GKS::splitByGroupsP1()
         for(int i{0}; i < products_cached.size() - 1; i++){
             for(int j{i + 1}; j < products_cached.size(); j++){
                 if(similarity_matrix_cached_copy.at(i).at(j) == max){
-                    similarity_matrix_cached_copy[i][j] = 0;
                     Product c_product_f(products_cached.at(i)), c_product_s(products_cached.at(j));
-                    if(!products_in_groups.contains(c_product_f)){
-                        if(c_group.contains(c_product_s) || (!c_group.size() && (products_cached.size() == products_in_groups.size() + 1 || !products_in_groups.contains(c_product_s)))){
+                    if(!products_in_groups.contains(c_product_f) && !products_in_groups.contains(c_product_s)){
+                        if(!c_group.size()){
+                            c_group.push_back(c_product_f);
+                            c_group.push_back(c_product_s);
+                            products_in_groups.push_back(c_product_f);
+                            products_in_groups.push_back(c_product_s);
+                            similarity_matrix_cached_copy[i][j] = 0;
+                        }else{
+                            continue;
+                        }
+                    }else if(!products_in_groups.contains(c_product_f)){
+                        similarity_matrix_cached_copy[i][j] = 0;
+                        if(c_group.contains(c_product_s) || (!c_group.size() && products_in_groups.size() == products_cached.size() - 1)){
                             c_group.push_back(c_product_f);
                             products_in_groups.push_back(c_product_f);
+                        }else{
+                            continue;
                         }
-                    }
-                    if(!products_in_groups.contains(c_product_s)){
-                        if(c_group.contains(c_product_f) || (!c_group.size() && (products_cached.size() == products_in_groups.size() + 1 || !products_in_groups.contains(c_product_f)))){
+                    }else if(!products_in_groups.contains(c_product_s)){
+                        similarity_matrix_cached_copy[i][j] = 0;
+                        if(c_group.contains(c_product_f) || (!c_group.size() && products_in_groups.size() == products_cached.size() - 1)){
                             c_group.push_back(c_product_s);
                             products_in_groups.push_back(c_product_s);
+                        }else{
+                            continue;
                         }
+                    }else{
+                        similarity_matrix_cached_copy[i][j] = 0;
+                        continue;
                     }
                 }
             }
@@ -307,13 +325,10 @@ void GKS::graphsDecomposition()
                 if(skipped.contains(c_node)){
                     continue;
                 }
-                /*if(c_node->haveOnlyInputs() || c_node->haveOnlyOutputs()){
-                    skipped.append(c_node);
-                    continue;
-                }*/
                 if(c_node->operations.length() > 4){
                     continue;
                 }
+
                 for(auto &another_node : c_graph.nodes){ //Перевірка наявності зворотніх зв'язків
                     if(skipped.contains(another_node) || reverse_checked.contains(another_node)){ //Вершина не може мати зворотній зв'язок або вже була перевірена
                         continue;
@@ -332,7 +347,18 @@ void GKS::graphsDecomposition()
                     break;
                 }
                 reverse_checked.append(c_node);
-
+            }
+            if(start_from_scratch){
+                continue;
+            }
+            for(int j{0}; j < c_graph.nodes.size(); j++){
+                GNode *c_node = c_graph.nodes[j];
+                if(skipped.contains(c_node)){
+                    continue;
+                }
+                if(c_node->operations.length() > 4){
+                    continue;
+                }
                 QVector<GNode*> loop_vect = checkClosedLoop(c_node, 5);
                 if(loop_vect.size()){ //Перевірка наявності контуру
                     /*int loop_start{-1};
@@ -354,7 +380,6 @@ void GKS::graphsDecomposition()
                         break;
                     }
                 }
-
                 QVector<GNode*> chain_vect = checkChain(c_node, c_node, 5);
                 if(chain_vect.size()){ //Перевірка наявності контуру
                     int total_ops{0};
@@ -444,8 +469,14 @@ QVector<Module*> GKS::createModules()
                 break;
             }
         }
-        if(founded.size() == c_operations.size()){
-            to_del.append(i);
+        if(founded.size()){
+            if(founded.size() == c_operations.size()){
+                to_del.append(i);
+            }else{
+                for(QString &str : founded){
+                    all_nodes[i]->operations.removeAll(str);
+                }
+            }
         }
     }
 
@@ -490,13 +521,13 @@ QVector<ProductModule> GKS::getProductsWithModules()
 QVector<GNode*> GKS::checkClosedLoop(GNode *node, int depth_left)
 {
     QVector<GNode*> ret_vect;
-    if(!depth_left){
-        node->check_in_progres = false;
-        return ret_vect;
-    }
     if(node->check_in_progres){
         node->check_in_progres = false;
         ret_vect.append(node);
+        return ret_vect;
+    }
+    if(!depth_left){
+        node->check_in_progres = false;
         return ret_vect;
     }
     node->check_in_progres = true;
