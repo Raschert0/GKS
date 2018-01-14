@@ -6,7 +6,7 @@ FirstMatrixWindow::FirstMatrixWindow(QWidget *parent) : QWidget(parent)
     tabw.move(10,10);
     tabw.setColumnCount(1);
     tabw.setRowCount(1);
-    tabw.setFixedSize(600,300);
+    tabw.setFixedSize(900,600);
     tabw.setHorizontalHeaderLabels(QStringList(""));
     tabw.setVerticalHeaderLabels(QStringList(""));
     setMinimumSize(tabw.width()+20,tabw.height()+20);
